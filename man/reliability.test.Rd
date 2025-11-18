@@ -12,7 +12,8 @@ reliability.test(
   family = c("gaussian", "binomial", "cox"),
   cell_num,
   n = 100,
-  nfold = 10
+  nfold = 10,
+  verbose = TRUE
 )
 }
 \arguments{

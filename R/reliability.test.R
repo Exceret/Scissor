@@ -29,23 +29,42 @@
 #'   \item{Measurement_test_real}{The evaluation measurement on each fold calculated using the real label.}
 #'   \item{Measurement_test_back}{A list with each component contains the evaluation measurements calculated using the permutated labels.}
 #'
-#' @import progress Matrix
+#' @import Matrix
 #' @export
-reliability.test <- function(X, Y, network, alpha, family = c("gaussian","binomial","cox"), cell_num, n = 100, nfold = 10){
-
-    library(progress)
-    library(Matrix)
-
-    if (family == 'gaussian'){
-        result <- test_lm(X, Y, network, alpha, cell_num, n, nfold)
-    }
-    if (family == 'binomial'){
-        library(pROC)
-        result <- test_logit(X, Y, network, alpha, cell_num, n, nfold)
-    }
-    if (family == 'cox'){
-        library(survival)
-        result <- test_cox(X, Y, network, alpha, cell_num, n, nfold)
-    }
-    return(result)
+reliability.test <- function(
+    X,
+    Y,
+    network,
+    alpha,
+    family = c("gaussian", "binomial", "cox"),
+    cell_num,
+    n = 100,
+    nfold = 10,
+    verbose = TRUE
+) {
+    # library(progress)
+    # library(Matrix)
+    switch(
+        family,
+        'gaussian' = test_lm(
+            X,
+            Y,
+            network,
+            alpha,
+            cell_num,
+            n,
+            nfold,
+            verbose = verbose
+        ),
+        'binomial' = Scissor::test_logit(
+            X,
+            Y,
+            network,
+            alpha,
+            cell_num,
+            n,
+            nfold
+        ),
+        'cox' = test_cox(X, Y, network, alpha, cell_num, n, nfold)
+    )
 }

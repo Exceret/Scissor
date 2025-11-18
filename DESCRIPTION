@@ -7,11 +7,23 @@ Description: Scissor is a novel approach that utilizes the bulk phenotypes, such
 License: GPL (>= 2)
 Depends: R (>= 3.6.1), Seurat (>= 3.2.0), Matrix (>= 1.2-18)
 LazyData: true
-Imports: Rcpp, Matrix, Seurat, preprocessCore, progress, pROC, survival, knitr, rmarkdown
+Imports: 
+    Rcpp,
+    Matrix,
+    Seurat,
+    pROC,
+    survival,
+    knitr,
+    rmarkdown,
+    SigBridgeRUtils,
+    cli,
+    SeuratObject,
+    purrr,
+    rlang
 LinkingTo: Rcpp, RcppEigen
 NeedsCompilation: yes
 BugReports: https://github.com/sunduanchen/Scissor/issues
 URL: https://github.com/sunduanchen/Scissor
-RoxygenNote: 7.1.1
+RoxygenNote: 7.3.3
 Encoding: UTF-8
 biocViews:
