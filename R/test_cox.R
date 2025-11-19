@@ -111,7 +111,7 @@ test_cox <- function(X, Y, network, alpha, cell_num, n = 100, nfold = 10, ...) {
         cli::cli_progress_update()
         if (i == n) {
             cli::cli_process_done()
-            cat("Finished!\n")
+            ts_cli$cli_alert_info("Finished!\n")
         }
     }
     statistic <- Matrix::mean(c_index_test_real)

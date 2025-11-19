@@ -9,6 +9,7 @@ test_logit <- function(
     nfold = 10,
     ...
 ) {
+    # * SigBridgeR Conifg
     dots <- rlang::list2(...)
     seed <- dots$seed %||% SigBridgeRUtils::getFuncOption("seed")
     verbose <- dots$verbose %||% SigBridgeRUtils::getFuncOption("verbose")
@@ -123,7 +124,7 @@ test_logit <- function(
         cli::cli_progress_update()
         if (i == n) {
             cli::cli_progress_done()
-            cat("Finished!\n")
+            ts_cli$cli_alert_info("Finished!\n")
         }
     }
     statistic <- Matrix::mean(AUC_test_real)
