@@ -13,7 +13,7 @@ reliability.test(
   cell_num,
   n = 100,
   nfold = 10,
-  verbose = TRUE
+  verbose = SigBridgeRUtils::getFuncOption("verbose")
 )
 }
 \arguments{
@@ -32,6 +32,8 @@ reliability.test(
 \item{n}{Permutation times.}
 
 \item{nfold}{The fold number in cross-validation.}
+
+\item{verbose}{Logical, whether to print ouput message}
 }
 \value{
 A list containing the following components:

@@ -1,6 +1,19 @@
 #' @keywords internal
-test_logit <- function(X, Y, network, alpha, cell_num, n = 100, nfold = 10) {
-    set.seed(2)
+test_logit <- function(
+    X,
+    Y,
+    network,
+    alpha,
+    cell_num,
+    n = 100,
+    nfold = 10,
+    ...
+) {
+    dots <- rlang::list2(...)
+    seed <- dots$seed %||% SigBridgeRUtils::getFuncOption("seed")
+    verbose <- dots$verbose %||% SigBridgeRUtils::getFuncOption("verbose")
+
+    set.seed(seed)
     m1 <- sum(Y == 1)
     m2 <- sum(Y == 0)
     index1 <- sample(cut(seq(m1), breaks = nfold, labels = F))
@@ -19,7 +32,7 @@ test_logit <- function(X, Y, network, alpha, cell_num, n = 100, nfold = 10) {
         Y_train <- Y[-c_index]
         fit <- NULL
         while (is.null(fit$fit)) {
-            set.seed(123)
+            set.seed(seed)
             fit <- APML1(
                 X_train,
                 Y_train,

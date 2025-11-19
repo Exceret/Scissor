@@ -2,6 +2,25 @@
 #####  Print  #####
 ###################
 
+#' @title Print APML1 Model Summary
+#' @description
+#' Prints a formatted summary of APML1 (Adaptive Penalized Model L1) objects.
+#' Displays model type, penalty information, and regularization path details.
+#'
+#' @param x An APML1 model object
+#' @param digits Number of significant digits to display (default: 4)
+#' @param ... Additional arguments passed to print methods
+#'
+#' @return No return value, prints model summary to console
+#'
+#' @examples
+#' \dontrun{
+#' # After fitting an APML1 model
+#' model <- APML1(x, y, family = "gaussian", penalty = "Lasso")
+#' print(model)
+#' }
+#'
+#' @method print APML1
 #' @export
 print.APML1 = function(x, digits = 4, ...) {
     #cat("\nCall: ", deparse(x$call))

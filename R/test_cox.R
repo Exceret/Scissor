@@ -1,6 +1,11 @@
 #' @keywords internal
-test_cox <- function(X, Y, network, alpha, cell_num, n = 100, nfold = 10) {
-    set.seed(1)
+test_cox <- function(X, Y, network, alpha, cell_num, n = 100, nfold = 10, ...) {
+    # * SigBridgeR Config
+    dots <- rlang::list2(...)
+    seed <- dots$seed %||% SigBridgeRUtils::getFuncOption("seed")
+    verbose <- dots$verbose %||% SigBridgeRUtils::getFuncOption("verbose")
+
+    set.seed(seed)
     m1 <- sum(Y[, 2] == 1)
     m2 <- sum(Y[, 2] == 0)
     index0 <- sample(cut(seq(m1 + m2), breaks = nfold, labels = F))
@@ -8,7 +13,7 @@ test_cox <- function(X, Y, network, alpha, cell_num, n = 100, nfold = 10) {
     #index2 <- sample(cut(seq(m2), breaks = nfold, labels = F))
 
     Matrix::print("|**************************************************|")
-    Matrix::print("Perform cross-validation on X with true label")
+    ts_cli$cli_alert_info("Perform cross-validation on X with true label")
     c_index_test_real <- NULL
     cli::cli_progress_bar("CV with true labels", total = nfold)
     for (j in 1:nfold) {
@@ -54,7 +59,7 @@ test_cox <- function(X, Y, network, alpha, cell_num, n = 100, nfold = 10) {
     }
 
     Matrix::print("|**************************************************|")
-    Matrix::print("Perform cross-validation on X with permutated label")
+    ts_cli$cli_alert_info("Perform cross-validation on X with permutated label")
     c_index_test_back <- list()
     cli::cli_progress_bar("CV with permutated labels", total = n)
     for (i in 1:n) {

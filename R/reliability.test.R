@@ -22,6 +22,7 @@
 #' @param cell_num The number of the Scissor selected cells.
 #' @param n Permutation times.
 #' @param nfold The fold number in cross-validation.
+#' @param verbose Logical, whether to print ouput message
 #'
 #' @return A list containing the following components:
 #'   \item{statistic}{The test statistic.}
@@ -40,7 +41,7 @@ reliability.test <- function(
     cell_num,
     n = 100,
     nfold = 10,
-    verbose = TRUE
+    verbose = SigBridgeRUtils::getFuncOption("verbose")
 ) {
     # library(progress)
     # library(Matrix)
@@ -56,7 +57,8 @@ reliability.test <- function(
             nfold,
             verbose = verbose
         ),
-        'binomial' = Scissor::test_logit(
+        # ? in future upgrade schedule
+        'binomial' = test_logit(
             X,
             Y,
             network,

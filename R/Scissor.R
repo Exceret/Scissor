@@ -3,6 +3,31 @@
 #' Scissor.v5 from `https://doi.org/10.1038/s41587-021-01091-3`and `https://github.com/sunduanchen/Scissor/issues/59`
 #' Another version of Scissor.v5() to optimize memory usage and execution speed in preprocess.
 #'
+#' @param bulk_dataset Bulk expression matrix of related disease. Each row represents a gene and each column represents a sample.
+#' @param sc_dataset Single-cell RNA-seq expression matrix of related disease. Each row represents a gene and each column represents a sample.
+#' A Seurat object that contains the preprocessed data and constructed network is preferred. Otherwise, a cell-cell similarity network is
+#' constructed based on the input matrix.
+#' @param phenotype Phenotype annotation of each bulk sample. It can be a continuous dependent variable,
+#' binary group indicator vector, or clinical survival data:
+#'   \itemize{
+#'   \item Continuous dependent variable. Should be a quantitative vector for \code{family = gaussian}.
+#'   \item Binary group indicator vector. Should be either a 0-1 encoded vector or a factor with two levels for \code{family = binomial}.
+#'   \item Clinical survival data. Should be a two-column matrix with columns named 'time' and 'status'. The latter is a binary variable,
+#'   with '1' indicating event (e.g.recurrence of cancer or death), and '0' indicating right censored.
+#'   The function \code{Surv()} in package survival produces such a matrix.
+#'   }
+#' @param tag Names for each phenotypic group. Used for linear and logistic regressions only.
+#' @param alpha Parameter used to balance the effect of the l1 norm and the network-based penalties. It can be a number or a searching vector.
+#' If \code{alpha = NULL}, a default searching vector is used. The range of alpha is in \code{[0,1]}. A larger alpha lays more emphasis on the l1 norm.
+#' @param cutoff Cutoff for the percentage of the Scissor selected cells in total cells. This parameter is used to restrict the number of the
+#' Scissor selected cells. A cutoff less than \code{50\%} (default \code{20\%}) is recommended depending on the input data.
+#' @param family Response type for the regression model. It depends on the type of the given phenotype and
+#' can be \code{family = gaussian} for linear regression, \code{family = binomial} for classification, or \code{family = cox} for Cox regression.
+#' @param Save_file File name for saving the preprocessed regression inputs into a RData.
+#' @param Load_file File name for loading the preprocessed regression inputs. It can help to tune the model parameter \code{alpha}.
+#' @param ... print verbose message, use seed for reproducibility and other optional arguments.
+#' Please see Scissor Tutorial for more details.
+#'
 #' @references
 #' Sun D, Guan X, Moran AE, Wu LY, Qian DZ, Schedin P, et al. Identifying phenotype-associated subpopulations by integrating bulk and single-cell sequencing data. Nat Biotechnol. 2022 Apr;40(4):527–38.
 #'
@@ -23,10 +48,13 @@ Scissor.v5.optimized <- function(
     family = c("gaussian", "binomial", "cox"),
     Save_file = "Scissor_inputs.RData",
     Load_file = NULL,
-    verbose = SigBridgeRUtils::getFuncOption("verbose"),
-    seed = SigBridgeRUtils::getFuncOption("seed"),
     ...
 ) {
+    # * see SigBridgeR package for its usage
+    dots <- rlang::list2(...)
+    verbose <- dots$verbose %||% SigBridgeRUtils::getFuncOption("verbose")
+    seed <- dots$seed %||% SigBridgeRUtils::getFuncOption("seed")
+
     if (verbose) {
         ts_cli$cli_alert_info(
             cli::col_green("Scissor start...")
@@ -47,52 +75,44 @@ Scissor.v5.optimized <- function(
             ))
         }
 
-        if (inherits(sc_dataset, "Seurat")) {
-            # sc_exprs <- as.matrix(sc_dataset@assays$RNA$data)
-            sc_exprs <- SeuratObject::LayerData(sc_dataset, layer = "data")
+        if (!inherits(sc_dataset, "Seurat")) {
+            cli::cli_abort(c(
+                "x" = "The given single-cell object is not a Seurat object. Please check Scissor inputs."
+            ))
+        }
+        # sc_exprs <- as.matrix(sc_dataset@assays$RNA$data)
+        sc_exprs <- SeuratObject::LayerData(sc_dataset, layer = "data")
 
-            if ("RNA_snn" %chin% names(sc_dataset@graphs)) {
-                # network <- as.matrix(sc_dataset@graphs$RNA_snn)
-                network <- SeuratObject::Graphs(
-                    sc_dataset,
-                    slot = "RNA_snn"
-                )
-
-                if (verbose) {
-                    cli::cli_alert_info(
-                        "Using {.val RNA_snn} graph for network."
-                    )
-                }
-            } else if ("integrated_snn" %chin% names(sc_dataset@graphs)) {
-                # network <- as.matrix(sc_dataset@graphs$integrated_snn)
-                network <- SeuratObject::Graphs(
-                    sc_dataset,
-                    slot = "integrated_snn"
-                )
-
-                if (verbose) {
-                    cli::cli_alert_info(
-                        "Using {.val integrated_snn} graph for network."
-                    )
-                }
-            } else {
-                cli::cli_abort(c(
-                    "x" = "No `RNA_snn` or `integrated_snn` graph in the given Seurat object. Please check Scissor inputs."
-                ))
-            }
-        } else {
-            sc_exprs <- Matrix::Matrix(as.matrix(sc_dataset))
-            Seurat_tmp <- SCPreProcess(
-                sc_dataset,
-                quality_control.pattern = c("^MT-"),
-                verbose = FALSE
-            )
+        if ("RNA_snn" %in% names(sc_dataset@graphs)) {
+            # network <- as.matrix(sc_dataset@graphs$RNA_snn)
             network <- SeuratObject::Graphs(
-                Seurat_tmp,
+                sc_dataset,
                 slot = "RNA_snn"
             )
-            rm(Seurat_tmp)
+
+            if (verbose) {
+                cli::cli_alert_info(
+                    "Using {.val RNA_snn} graph for network."
+                )
+            }
+        } else if ("integrated_snn" %in% names(sc_dataset@graphs)) {
+            # network <- as.matrix(sc_dataset@graphs$integrated_snn)
+            network <- SeuratObject::Graphs(
+                sc_dataset,
+                slot = "integrated_snn"
+            )
+
+            if (verbose) {
+                cli::cli_alert_info(
+                    "Using {.val integrated_snn} graph for network."
+                )
+            }
+        } else {
+            cli::cli_abort(c(
+                "x" = "No `RNA_snn` or `integrated_snn` graph in the given Seurat object. Please check Scissor inputs."
+            ))
         }
+
         Matrix::diag(network) <- 0
         network <- as.matrix((network != 0) * 1)
 
@@ -136,7 +156,10 @@ Scissor.v5.optimized <- function(
 
         X <- stats::cor(Expression_bulk, Expression_cell)
 
-        quality_check <- colQuantiles(X, probs = seq(0, 1, 0.25))
+        quality_check <- SigBridgeRUtils::colQuantiles(
+            X,
+            probs = seq(0, 1, 0.25)
+        )
         if (verbose) {
             cli::cli_text(
                 strrep("-", floor(getOption("width") / 2)),

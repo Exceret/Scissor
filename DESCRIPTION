@@ -5,21 +5,18 @@ Authors@R: c(person("Duanchen", "Sun", role = c("aut", "cre"), email = "sund@ohs
 Maintainer: Duanchen Sun <sund@ohsu.edu>
 Description: Scissor is a novel approach that utilizes the bulk phenotypes, such as disease stage, tumor metastasis, treatment response, and survival outcomes, to identify the most highly phenotype-associated cell subpopulations from single-cell data.
 License: GPL (>= 2)
-Depends: R (>= 3.6.1), Seurat (>= 3.2.0), Matrix (>= 1.2-18)
+Depends: R (>= 3.6.1)
 LazyData: true
 Imports: 
-    Rcpp,
     Matrix,
-    Seurat,
     pROC,
     survival,
-    knitr,
-    rmarkdown,
     SigBridgeRUtils,
     cli,
     SeuratObject,
     purrr,
-    rlang
+    rlang,
+    dplyr
 LinkingTo: Rcpp, RcppEigen
 NeedsCompilation: yes
 BugReports: https://github.com/sunduanchen/Scissor/issues
@@ -27,3 +24,12 @@ URL: https://github.com/sunduanchen/Scissor
 RoxygenNote: 7.3.3
 Encoding: UTF-8
 biocViews:
+Suggests: 
+    furrr,
+    future,
+    knitr,
+    matrixStats,    
+    Rcpp,
+    rmarkdown,
+    Seurat
+VignetteBuilder: knitr

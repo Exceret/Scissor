@@ -35,6 +35,12 @@ evaluate.cell <- function(
     # library(scales)
     load(Load_file) # X, Y, network, Expression_bulk, Expression_cell
 
+    percent <- function(x, accuracy = 1, scale = 100, suffix = "%") {
+        scaled <- x * scale
+        formatted <- format(round(scaled / accuracy) * accuracy, nsmall = 0)
+        paste0(formatted, suffix)
+    }
+
     selected_cell <- c(Scissor_result$Scissor_pos, Scissor_result$Scissor_neg)
     m <- ncol(Expression_bulk)
     n <- length(selected_cell)
@@ -137,7 +143,7 @@ evaluate.cell <- function(
         beta_bootstrap[i, ] <- Coefs_tmp[selected_cell]
         #pb2$tick()
         Sys.sleep(1 / 100)
-        cli::cli_progress_bar_update(i)
+        cli::cli_progress_update()
         if (i == bootstrap_n) {
             cli::cli_progress_done()
             cat("Finished!\n")
