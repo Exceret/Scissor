@@ -20,7 +20,6 @@ test_logit <- function(
     index1 <- sample(cut(seq(m1), breaks = nfold, labels = F))
     index2 <- sample(cut(seq(m2), breaks = nfold, labels = F))
 
-    Matrix::print("|**************************************************|")
     Matrix::print("Perform cross-validation on X with true label")
     AUC_test_real <- NULL
     cli::cli_progress_bar("CV with true labels", total = nfold)

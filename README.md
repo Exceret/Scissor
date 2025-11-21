@@ -1,6 +1,6 @@
 # Scissor: Single-Cell Identification of Subpopulations with bulk Sample phenOtype coRrelation
 
-Fork and Tweaks by Exceret.
+Forked and tweaked by Exceret.
 
 ### Introduction
 

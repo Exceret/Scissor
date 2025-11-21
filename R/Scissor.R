@@ -191,9 +191,9 @@ Scissor.v5.optimized <- function(
                 Y <- as.numeric(phenotype)
                 z <- table(Y)
                 if (length(z) != length(tag)) {
-                    cli::cli_abort(
+                    cli::cli_abort(c(
                         "x" = "The length differs between tags and phenotypes. Please check Scissor inputs and selected regression type."
-                    )
+                    ))
                 }
                 if (verbose) {
                     cli::cli_alert_info(
@@ -209,11 +209,11 @@ Scissor.v5.optimized <- function(
                 Y <- as.numeric(phenotype)
                 z <- table(Y)
                 if (length(z) != length(tag)) {
-                    cli::cli_abort(
+                    cli::cli_abort(c(
                         "x" = "The length differs between tags and phenotypes. Please check Scissor inputs and selected regression type.",
                         "i" = "length of tags: {.val {length(tag)}}",
                         "i" = "length of phenotypes: {.val {length(z)}}"
-                    )
+                    ))
                 }
                 if (verbose) {
                     tmp <- paste(z, tag)
@@ -236,9 +236,9 @@ Scissor.v5.optimized <- function(
             cox = function() {
                 Y <- as.matrix(phenotype)
                 if (ncol(Y) != 2) {
-                    cli::cli_abort(
+                    cli::cli_abort(c(
                         "x" = "The size of survival data is wrong. Please check Scissor inputs and selected regression type."
-                    )
+                    ))
                 }
                 if (verbose) {
                     ts_cli$cli_alert_info(
