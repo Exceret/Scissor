@@ -16,7 +16,8 @@ Imports:
     SeuratObject,
     purrr,
     rlang,
-    dplyr
+    dplyr,
+    data.table
 LinkingTo: Rcpp, RcppEigen
 NeedsCompilation: yes
 BugReports: https://github.com/sunduanchen/Scissor/issues

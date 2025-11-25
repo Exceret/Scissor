@@ -25,9 +25,6 @@ test_lm(X, Y, network, alpha, cell_num, n = 100, nfold = 10, ...)
 \itemize{
   \item{seed}{Random seed (default: from SigBridgeRUtils options)}
   \item{verbose}{Whether to show progress messages (default: from SigBridgeRUtils options)}
-  \item{parallel}{Whether to use parallel processing (default: from SigBridgeRUtils options)}
-  \item{workers}{Number of parallel workers (default: from SigBridgeRUtils options)}
-  \item{parallel.type}{Type of parallel backend (default: from SigBridgeRUtils options)}
 }}
 }
 \value{

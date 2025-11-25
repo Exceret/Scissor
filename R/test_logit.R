@@ -29,8 +29,8 @@ test_logit <- function(
   }
   for (j in 1:nfold) {
     c_index <- c(
-      Matrix::which(Y == 1)[Matrix::which(index1 == j)],
-      Matrix::which(Y == 0)[Matrix::which(index2 == j)]
+      which(Y == 1)[which(index1 == j)],
+      which(Y == 0)[which(index2 == j)]
     )
     X_train <- X[-c_index, ]
     Y_train <- Y[-c_index]
@@ -49,8 +49,8 @@ test_logit <- function(
     }
     index <- which.min(abs(fit$fit$nzero - cell_num))
     Coefs <- as.numeric(fit$Beta[2:(ncol(X_train) + 1), index])
-    Cell1 <- Coefs[Matrix::which(Coefs > 0)]
-    Cell2 <- Coefs[Matrix::which(Coefs < 0)]
+    Cell1 <- Coefs[which(Coefs > 0)]
+    Cell2 <- Coefs[which(Coefs < 0)]
 
     X_test <- X[c_index, ]
     Y_test <- Y[c_index]
@@ -93,8 +93,8 @@ test_logit <- function(
     names(Y2) <- rownames(X)
     for (j in 1:nfold) {
       c_index <- c(
-        Matrix::which(Y2 == 1)[Matrix::which(index1 == j)],
-        Matrix::which(Y2 == 0)[Matrix::which(index2 == j)]
+        which(Y2 == 1)[which(index1 == j)],
+        which(Y2 == 0)[which(index2 == j)]
       )
       X_train <- X[-c_index, ]
       Y_train <- Y2[-c_index]
@@ -145,11 +145,11 @@ test_logit <- function(
   p <- sum(background > statistic) / n
 
   if (verbose) {
-    Matrix::print(sprintf(
+    cli::cli_text(sprintf(
       "Test statistic = %s",
       formatC(statistic, format = "f", digits = 3)
     ))
-    Matrix::print(sprintf(
+    cli::cli_text(sprintf(
       "Reliability significance test p = %s",
       formatC(p, format = "f", digits = 3)
     ))
