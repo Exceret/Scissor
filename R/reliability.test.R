@@ -1,5 +1,6 @@
-#' Reliability Significance Test
+#' @title Reliability Significance Test
 #'
+#' @description
 #' Performs the reliability significance test to determine whether the inferred phenotype-to-cell
 #' associations are reliable (statistical p-value less than 0.05) or are false positives.
 #'
@@ -22,7 +23,7 @@
 #' @param cell_num The number of the Scissor selected cells.
 #' @param n Permutation times.
 #' @param nfold The fold number in cross-validation.
-#' @param verbose Logical, whether to print ouput message
+#' @param ... Other parameters like verbose and seed
 #'
 #' @return A list containing the following components:
 #'   \item{statistic}{The test statistic.}
@@ -33,40 +34,40 @@
 #' @import Matrix
 #' @export
 reliability.test <- function(
-    X,
-    Y,
-    network,
-    alpha,
-    family = c("gaussian", "binomial", "cox"),
-    cell_num,
-    n = 100,
-    nfold = 10,
-    verbose = SigBridgeRUtils::getFuncOption("verbose")
+  X,
+  Y,
+  network,
+  alpha,
+  family = c("gaussian", "binomial", "cox"),
+  cell_num,
+  n = 100,
+  nfold = 10,
+  ...
 ) {
-    # library(progress)
-    # library(Matrix)
-    switch(
-        family,
-        'gaussian' = test_lm(
-            X,
-            Y,
-            network,
-            alpha,
-            cell_num,
-            n,
-            nfold,
-            verbose = verbose
-        ),
-        # ? in future upgrade schedule
-        'binomial' = test_logit(
-            X,
-            Y,
-            network,
-            alpha,
-            cell_num,
-            n,
-            nfold
-        ),
-        'cox' = test_cox(X, Y, network, alpha, cell_num, n, nfold)
-    )
+  # library(progress)
+  # library(Matrix)
+  switch(
+    family,
+    'gaussian' = test_lm(
+      X,
+      Y,
+      network,
+      alpha,
+      cell_num,
+      n,
+      nfold,
+      ...
+    ),
+    'binomial' = test_logit(
+      X,
+      Y,
+      network,
+      alpha,
+      cell_num,
+      n,
+      nfold,
+      ...
+    ),
+    'cox' = test_cox(X, Y, network, alpha, cell_num, n, nfold, ...)
+  )
 }

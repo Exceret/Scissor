@@ -13,7 +13,7 @@ reliability.test(
   cell_num,
   n = 100,
   nfold = 10,
-  verbose = SigBridgeRUtils::getFuncOption("verbose")
+  ...
 )
 }
 \arguments{
@@ -33,7 +33,7 @@ reliability.test(
 
 \item{nfold}{The fold number in cross-validation.}
 
-\item{verbose}{Logical, whether to print ouput message}
+\item{...}{Other parameters like verbose and seed}
 }
 \value{
 A list containing the following components:
@@ -45,8 +45,7 @@ A list containing the following components:
 \description{
 Performs the reliability significance test to determine whether the inferred phenotype-to-cell
 associations are reliable (statistical p-value less than 0.05) or are false positives.
-}
-\details{
+
 This statistical test can determine whether the inferred phenotype-to-cell associations are
 reliable (statistical p-value less than 0.05) or are false positives.
 
