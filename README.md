@@ -1,6 +1,7 @@
 # Scissor: Single-Cell Identification of Subpopulations with bulk Sample phenOtype coRrelation
 
-Forked and tweaked by Exceret.
+Please use [SigBridgeR](https://github.com/WangLabCSU/SigBridgeR) for the fork version of Scissor. Bug reports and feature requests are welcomed at [SigBridgeR-issues](https://github.com/WangLabCSU/SigBridgeR/issues).
+
 
 ### Introduction
 
