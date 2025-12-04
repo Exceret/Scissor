@@ -11,7 +11,7 @@ Imports:
     Matrix,
     pROC,
     survival,
-    SigBridgeRUtils,
+    SigBridgeRUtils (>= 0.1.0),
     cli,
     SeuratObject,
     purrr,

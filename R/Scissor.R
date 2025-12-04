@@ -156,7 +156,7 @@ Scissor.v5.optimized <- function(
 
         X <- stats::cor(Expression_bulk, Expression_cell)
 
-        quality_check <- SigBridgeRUtils::colQuantiles(
+        quality_check <- SigBridgeRUtils::colQuantiles3(
             X,
             probs = seq(0, 1, 0.25)
         )
