@@ -19,7 +19,7 @@ Imports:
     dplyr,
     data.table
 Remotes:
-    github::WangLabCSU/SigBridgeRUtils
+    github::WangLabCSU/SigBridgeRUtils,
     bioc::pROC
 LinkingTo: Rcpp, RcppEigen
 NeedsCompilation: yes
