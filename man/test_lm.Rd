@@ -39,9 +39,3 @@ A list containing:
 \description{
 Perform linear model testing with cross-validation and permutation tests
 }
-\details{
-This function performs n-fold cross-validation with the true labels,
-then conducts permutation testing by randomly shuffling labels n times to
-assess whether the model performs significantly better than random. The
-function provides verbose output and supports parallel processing.
-}
