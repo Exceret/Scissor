@@ -24,104 +24,104 @@
 #' @export
 #'
 test_lm <- function(
-    X,
-    Y,
-    network,
-    alpha,
-    cell_num,
-    n = 100,
-    nfold = 10,
-    ...
+  X,
+  Y,
+  network,
+  alpha,
+  cell_num,
+  n = 100,
+  nfold = 10,
+  ...
 ) {
-    dots <- rlang::list2(...)
-    seed <- dots$seed %||% SigBridgeRUtils::getFuncOption("seed")
-    verbose <- dots$verbose %||% SigBridgeRUtils::getFuncOption("verbose")
+  dots <- rlang::list2(...)
+  seed <- dots$seed %||% SigBridgeRUtils::getFuncOption("seed")
+  verbose <- dots$verbose %||% SigBridgeRUtils::getFuncOption("verbose")
 
-    set.seed(seed)
-    m <- nrow(X)
-    index0 <- sample(cut(seq_len(m), breaks = nfold, labels = FALSE))
+  set.seed(seed)
+  m <- nrow(X)
+  index0 <- sample(cut(seq_len(m), breaks = nfold, labels = FALSE))
 
-    if (verbose) {
-        ts_cli$cli_alert_info(
-            "Performing {nfold}-fold cross-validation on X with true labels"
-        )
-    }
-    X <- Matrix::Matrix(X)
-    MSE_test_real <- numeric(nfold)
-
-    if (verbose) {
-        cli::cli_progress_bar("CV with true labels", total = nfold)
-    }
-    for (j in seq_len(nfold)) {
-        MSE_test_real[j] <- ComputeFold(
-            j,
-            X,
-            Y,
-            index0,
-            network,
-            alpha,
-            cell_num
-        )
-        if (verbose) {
-            cli::cli_progress_update()
-        }
-        Sys.sleep(1 / 100)
-    }
-    if (verbose) {
-        cli::cli_progress_done()
-    }
-
-    if (verbose) {
-        ts_cli$cli_alert_info(
-            "Perform cross-validation on X with permutated label"
-        )
-    }
-
-    MSE_test_back <- purrr::map(
-        seq_len(n),
-        ~ PermutationValidate(
-            i = .x, # i
-            X = X,
-            Y = Y,
-            index0 = index0,
-            network = network,
-            alpha = alpha,
-            cell_num = cell_num,
-            nfold = nfold,
-            m = m,
-            seed = seed
-        ),
-        .progress = if (verbose) 'Permutation Validation' else FALSE
+  if (verbose) {
+    ts_cli$cli_alert_info(
+      "Performing {nfold}-fold cross-validation on X with true labels"
     )
+  }
+  X <- Matrix::Matrix(X)
+  MSE_test_real <- numeric(nfold)
 
-    names(MSE_test_back) <- paste0("n_", seq_len(n))
-    background <- purrr::map_dbl(MSE_test_back, mean)
-
-    statistic <- Matrix::mean(background, na.rm = TRUE)
-    p <- sum(background < statistic, na.rm = TRUE) / sum(!is.na(background))
-
-    if (verbose) {
-        cli::cli_h3("Results")
-        cli::cli_alert_success(
-            "Test statistic (mean MSE) = {.val {round(statistic, 3)}}"
-        )
-        cli::cli_alert_success(
-            "Reliability test p-value = {.val {round(p, 3)}}"
-        )
-    }
-
-    if (p >= 0.05) {
-        cli::cli_warn(
-            "Model is NOT significantly better than random (p >= 0.05)"
-        )
-    }
-
-    list(
-        statistic = statistic,
-        p = p,
-        MSE_test_real = MSE_test_real,
-        MSE_test_back = MSE_test_back
+  if (verbose) {
+    cli::cli_progress_bar("CV with true labels", total = nfold)
+  }
+  for (j in seq_len(nfold)) {
+    MSE_test_real[j] <- ComputeFold(
+      j,
+      X,
+      Y,
+      index0,
+      network,
+      alpha,
+      cell_num
     )
+    if (verbose) {
+      cli::cli_progress_update()
+    }
+    Sys.sleep(1 / 100)
+  }
+  if (verbose) {
+    cli::cli_progress_done()
+  }
+
+  if (verbose) {
+    ts_cli$cli_alert_info(
+      "Perform cross-validation on X with permutated label"
+    )
+  }
+
+  MSE_test_back <- purrr::map(
+    seq_len(n),
+    ~ PermutationValidate(
+      i = .x, # i
+      X = X,
+      Y = Y,
+      index0 = index0,
+      network = network,
+      alpha = alpha,
+      cell_num = cell_num,
+      nfold = nfold,
+      m = m,
+      seed = seed
+    ),
+    .progress = if (verbose) 'Permutation Validation' else FALSE
+  )
+
+  names(MSE_test_back) <- paste0("n_", seq_len(n))
+  background <- purrr::map_dbl(MSE_test_back, mean)
+
+  statistic <- Matrix::mean(background, na.rm = TRUE)
+  p <- sum(background < statistic, na.rm = TRUE) / sum(!is.na(background))
+
+  if (verbose) {
+    cli::cli_h3("Results")
+    cli::cli_alert_success(
+      "Test statistic (mean MSE) = {.val {round(statistic, 3)}}"
+    )
+    cli::cli_alert_success(
+      "Reliability test p-value = {.val {round(p, 3)}}"
+    )
+  }
+
+  if (p >= 0.05) {
+    cli::cli_warn(
+      "Model is NOT significantly better than random (p >= 0.05)"
+    )
+  }
+
+  list(
+    statistic = statistic,
+    p = p,
+    MSE_test_real = MSE_test_real,
+    MSE_test_back = MSE_test_back
+  )
 }
 
 
@@ -145,31 +145,31 @@ test_lm <- function(
 #' @return Mean squared error for the test fold
 #'
 ComputeFold <- function(j, X, Y, index0, network, alpha, cell_num, seed) {
-    c_index <- which(index0 == j)
-    X_train <- X[-c_index, , drop = FALSE]
-    Y_train <- Y[-c_index]
-    X_test <- X[c_index, , drop = FALSE]
-    Y_test <- Y[c_index]
+  c_index <- which(index0 == j)
+  X_train <- X[-c_index, , drop = FALSE]
+  Y_train <- Y[-c_index]
+  X_test <- X[c_index, , drop = FALSE]
+  Y_test <- Y[c_index]
 
-    # 拟合模型
-    fit <- NULL
-    while (is.null(fit$fit)) {
-        set.seed(seed)
-        fit <- APML1(
-            X_train,
-            Y_train,
-            family = "gaussian",
-            penalty = "Net",
-            alpha = alpha,
-            Omega = network,
-            nlambda = 100
-        )
-    }
+  # 拟合模型
+  fit <- NULL
+  while (is.null(fit$fit)) {
+    set.seed(seed)
+    fit <- APML1(
+      X_train,
+      Y_train,
+      family = "gaussian",
+      penalty = "Net",
+      alpha = alpha,
+      Omega = network,
+      nlambda = 100
+    )
+  }
 
-    index <- which.min(abs(fit$fit$nzero - cell_num))
-    Coefs <- as.numeric(fit$Beta[, index])
+  index <- which.min(abs(fit$fit$nzero - cell_num))
+  Coefs <- as.numeric(fit$Beta[, index])
 
-    mean((Y_test - X_test %*% Coefs)^2)
+  mean((Y_test - X_test %*% Coefs)^2)
 }
 
 
@@ -194,34 +194,34 @@ ComputeFold <- function(j, X, Y, index0, network, alpha, cell_num, seed) {
 #' @export
 #'
 PermutationValidate <- function(
-    i,
-    X,
-    Y,
-    index0,
-    network,
-    alpha,
-    cell_num,
-    nfold,
-    m,
-    seed
+  i,
+  X,
+  Y,
+  index0,
+  network,
+  alpha,
+  cell_num,
+  nfold,
+  m,
+  seed
 ) {
-    set.seed(i + seed)
-    Y2 <- Y[sample(m)]
+  set.seed(i + seed)
+  Y2 <- Y[sample(m)]
 
-    mse_vec <- numeric(nfold)
-    names(mse_vec) <- paste0("nfold_", seq_len(nfold))
-    for (j in seq_len(nfold)) {
-        mse_vec[j] <- ComputeFold(
-            j,
-            X,
-            Y2,
-            index0,
-            network,
-            alpha,
-            cell_num,
-            seed
-        )
-    }
+  mse_vec <- numeric(nfold)
+  names(mse_vec) <- paste0("nfold_", seq_len(nfold))
+  for (j in seq_len(nfold)) {
+    mse_vec[j] <- ComputeFold(
+      j,
+      X,
+      Y2,
+      index0,
+      network,
+      alpha,
+      cell_num,
+      seed
+    )
+  }
 
-    mse_vec
+  mse_vec
 }
