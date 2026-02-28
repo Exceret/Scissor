@@ -14,7 +14,7 @@ test_logit <- function(
   seed <- dots$seed %||% SigBridgeRUtils::getFuncOption("seed")
   verbose <- dots$verbose %||% SigBridgeRUtils::getFuncOption("verbose")
 
-  set.seed(seed)
+  set.seed(2L)
   m1 <- sum(Y == 1)
   m2 <- sum(Y == 0)
   index1 <- sample(cut(seq(m1), breaks = nfold, labels = F))
@@ -82,7 +82,7 @@ test_logit <- function(
   }
 
   for (i in 1:n) {
-    set.seed(i + 100)
+    set.seed(i + 100L)
     AUC_test_back[[i]] <- matrix(
       0,
       nfold,
@@ -100,7 +100,7 @@ test_logit <- function(
       Y_train <- Y2[-c_index]
       fit <- NULL
       while (is.null(fit$fit)) {
-        set.seed(123)
+        set.seed(seed)
         fit <- APML1(
           X_train,
           Y_train,

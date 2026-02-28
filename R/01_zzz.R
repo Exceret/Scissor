@@ -9,5 +9,8 @@
   invisible()
 }
 
-
+#' @keywords internal
 ts_cli <- SigBridgeRUtils::CreateTimeStampCliEnv()
+
+#' @importFrom data.table `%chin%`
+NULL
