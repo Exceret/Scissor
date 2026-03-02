@@ -89,7 +89,7 @@ LogL0 = function(
   wbeta1i = wbeta1
   wbetaii = wbetai
 
-  indexi = Matrix::which(apply(x1i, 2, sd) == 0)[-1]
+  indexi = Matrix::which(apply(x1i, 2, stats::sd) == 0)[-1]
   if (length(indexi) > 0) {
     x1i = x1i[, -indexi]
     p1i = p1i - length(indexi)
@@ -213,7 +213,7 @@ LogL0 = function(
         wbeta1i = wbeta1
         wbetaii = wbetai
 
-        indexi = Matrix::which(apply(x1i, 2, sd) == 0)[-1]
+        indexi = Matrix::which(apply(x1i, 2, stats::sd) == 0)[-1]
         if (length(indexi) > 0) {
           # x1i=matrix(x1i[,-indexi],nrow=N0i[i]); x1j=matrix(x1j[,-indexi],nrow=Nf[i])
           x1i = x1i[, -indexi, drop = F]

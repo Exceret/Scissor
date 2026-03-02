@@ -350,7 +350,7 @@ Scissor.v5.optimized <- function(
 
   list(
     para = list(
-      alpha = alpha,
+      alpha = alpha[i],
       lambda = fit0$lambda.min,
       family = family,
       Coefs = Coefs # for miscellaneous informationss

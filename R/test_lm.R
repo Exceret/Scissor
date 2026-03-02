@@ -9,8 +9,8 @@
 #' @param nfold Number of folds for cross-validation (default: 10)
 #' @param ... Additional parameters including:
 #'   \itemize{
-#'     \item{seed}{Random seed (default: from SigBridgeRUtils options)}
-#'     \item{verbose}{Whether to show progress messages (default: from SigBridgeRUtils options)}
+#'     \item{seed}{Random seed (default: from SigBridgeR options)}
+#'     \item{verbose}{Whether to show progress messages (default: from SigBridgeR options)}
 #'   }
 #'
 #' @return A list containing:

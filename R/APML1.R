@@ -32,28 +32,28 @@ APML1 = function(
   family <- match.arg(family)
   penalty <- match.arg(penalty)
 
-  if (penalty == "Net" & is.null(Omega)) {
-    penalty = "Enet"
+  if (penalty == "Net" && is.null(Omega)) {
+    penalty <- "Enet"
     cat("Enet was performed as no input of Omega")
   }
-  if (penalty %in% c("Enet", "Net") & alpha == 1.0) {
-    penalty = "Lasso"
+  if (penalty %in% c("Enet", "Net") && alpha == 1.0) {
+    penalty <- "Lasso"
     cat("Lasso was performed as alpha=1.0")
   }
 
   if (alpha != 1.0) {
     if (is.null(Omega)) {
-      penalty = "Enet"
+      penalty <- "Enet"
     } else if (!is.null(Omega)) {
-      penalty = "Net"
+      penalty <- "Net"
     }
   } else {
-    penalty = "Lasso"
+    penalty <- "Lasso"
   }
 
-  wbeta = abs(wbeta)
+  wbeta <- abs(wbeta)
 
-  fit = switch(
+  fit <- switch(
     family,
     "gaussian" = LmL0(
       x,
@@ -116,6 +116,7 @@ APML1 = function(
   fit$family = family
 
   #fit$call=fcall
-  class(fit) = "APML1"
+  class(fit) <- "APML1"
+
   return(fit)
 }
