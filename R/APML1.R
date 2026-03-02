@@ -29,8 +29,8 @@ APML1 = function(
   maxit = 1e+5
 ) {
   #fcall=match.call()
-  family = match.arg(family)
-  penalty = match.arg(penalty)
+  family <- match.arg(family)
+  penalty <- match.arg(penalty)
 
   if (penalty == "Net" & is.null(Omega)) {
     penalty = "Enet"
