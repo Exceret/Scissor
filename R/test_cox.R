@@ -13,6 +13,7 @@ test_cox <- function(X, Y, network, alpha, cell_num, n = 100, nfold = 10, ...) {
   #index2 <- sample(cut(seq(m2), breaks = nfold, labels = F))
 
   background <- numeric(n)
+  c_index_test_real <- numeric(n)
   if (verbose) {
     ts_cli$cli_alert_info("Perform cross-validation on X with true label")
     cli::cli_progress_bar("CV with true labels", total = nfold)

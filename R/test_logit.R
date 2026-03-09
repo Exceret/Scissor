@@ -17,17 +17,17 @@ test_logit <- function(
   set.seed(2L)
   m1 <- sum(Y == 1)
   m2 <- sum(Y == 0)
-  index1 <- sample(cut(seq(m1), breaks = nfold, labels = F))
-  index2 <- sample(cut(seq(m2), breaks = nfold, labels = F))
+  index1 <- sample(cut(seq(m1), breaks = nfold, labels = FALSE))
+  index2 <- sample(cut(seq(m2), breaks = nfold, labels = FALSE))
 
   if (verbose) {
     ts_cli$cli_alert_info("Perform cross-validation on X with true label")
   }
-  AUC_test_real <- NULL
+  AUC_test_real <- numeric(length = nfold)
   if (verbose) {
     cli::cli_progress_bar("CV with true labels", total = nfold)
   }
-  for (j in 1:nfold) {
+  for (j in seq_len(nfold)) {
     c_index <- c(
       which(Y == 1)[which(index1 == j)],
       which(Y == 0)[which(index2 == j)]
@@ -76,12 +76,12 @@ test_logit <- function(
   if (verbose) {
     ts_cli$cli_alert_info("Perform cross-validation on X with permutated label")
   }
-  AUC_test_back <- list()
+  AUC_test_back <- vector(mode = "list", length = n)
   if (verbose) {
     cli::cli_progress_bar("CV with permutated labels", total = n)
   }
 
-  for (i in 1:n) {
+  for (i in seq_len(n)) {
     set.seed(i + 100L)
     AUC_test_back[[i]] <- matrix(
       0,
