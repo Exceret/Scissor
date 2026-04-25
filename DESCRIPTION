@@ -18,10 +18,6 @@ Imports:
     rlang,
     dplyr,
     data.table
-Remotes:
-    github::WangLabCSU/SigBridgeRUtils,
-    bioc::pROC,
-    bioc::WGCNA
 LinkingTo: Rcpp, RcppEigen
 NeedsCompilation: yes
 BugReports: https://github.com/sunduanchen/Scissor/issues
