@@ -23,8 +23,8 @@ test_lm(X, Y, network, alpha, cell_num, n = 100, nfold = 10, ...)
 
 \item{...}{Additional parameters including:
 \itemize{
-  \item{seed}{Random seed (default: from SigBridgeRUtils options)}
-  \item{verbose}{Whether to show progress messages (default: from SigBridgeRUtils options)}
+  \item{seed}{Random seed (default: from SigBridgeR options)}
+  \item{verbose}{Whether to show progress messages (default: from SigBridgeR options)}
 }}
 }
 \value{
@@ -38,10 +38,4 @@ A list containing:
 }
 \description{
 Perform linear model testing with cross-validation and permutation tests
-}
-\details{
-This function performs n-fold cross-validation with the true labels,
-then conducts permutation testing by randomly shuffling labels n times to
-assess whether the model performs significantly better than random. The
-function provides verbose output and supports parallel processing.
 }

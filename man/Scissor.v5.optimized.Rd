@@ -49,8 +49,7 @@ can be \code{family = gaussian} for linear regression, \code{family = binomial} 
 
 \item{Load_file}{File name for loading the preprocessed regression inputs. It can help to tune the model parameter \code{alpha}.}
 
-\item{...}{print verbose message, use seed for reproducibility and other optional arguments.
-Please see Scissor Tutorial for more details.}
+\item{...}{print `verbose` message, use `seed` for reproducibility and other optional arguments. Use `assay` to specify the assay slot of the Seurat object.}
 }
 \description{
 Scissor.v5 from `https://doi.org/10.1038/s41587-021-01091-3`and `https://github.com/sunduanchen/Scissor/issues/59`

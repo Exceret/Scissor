@@ -254,12 +254,12 @@ CoxL0 = function(
 
     cvraw = cvPL / weighti
     nfoldi = apply(!is.na(cvraw), 2, sum) #rm(cvPL) #
-    cvm = apply(cvraw, 2, weighted.mean, w = weighti, na.rm = TRUE)
+    cvm = apply(cvraw, 2, stats::weighted.mean, w = weighti, na.rm = TRUE)
     cvse = sqrt(
       apply(
         sweep(cvraw, 2, cvm, "-")^2,
         2,
-        weighted.mean,
+        stats::weighted.mean,
         w = weighti,
         na.rm = TRUE
       ) /
@@ -417,7 +417,7 @@ CoxL0 = function(
       cvm[[il0]] = apply(
         cvraw,
         2,
-        weighted.mean,
+        stats::weighted.mean,
         w = weighti,
         na.rm = TRUE
       )
@@ -544,7 +544,7 @@ CoxL0 = function(
             cvm[[il1[j]]] = apply(
               cvraw,
               2,
-              weighted.mean,
+              stats::weighted.mean,
               w = weighti,
               na.rm = TRUE
             )
